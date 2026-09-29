@@ -1,51 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="16dp" android:background="#0B0D10"
+    android:orientation="vertical" android:background="#07090D"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
-        <LinearLayout android:orientation="vertical" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content">
-            <TextView android:text="Mazkiplay Agent" android:textColor="#FFFFFF" android:textSize="25sp" android:textStyle="bold"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/modelLabel" android:text="Private AI workspace" android:textColor="#9AA4B2" android:textSize="13sp"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout android:orientation="vertical" android:padding="16dp"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <LinearLayout android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <LinearLayout android:orientation="vertical" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content">
+                    <TextView android:text="MAZKIPLAY" android:textColor="#FFFFFF" android:textSize="27sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                    <TextView android:text="AI JOB AGENT" android:textColor="#A7B0C0" android:textSize="12sp" android:letterSpacing="0.12" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <Button android:id="@+id/settings" android:text="⚙" android:minWidth="48dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <TextView android:id="@+id/clock" android:text="--:--:--" android:textColor="#7FF0BA" android:textSize="13sp" android:paddingTop="8dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/status" android:text="● ONLINE" android:textColor="#62E6A5" android:textSize="12sp" android:paddingBottom="10dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+            <HorizontalScrollView android:scrollbars="none" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                    <Button android:id="@+id/navHome" android:text="Dashboard" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/navJobs" android:text="Job Hunting" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/navApply" android:text="Applications" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/navAi" android:text="AI Agent" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <TextView android:id="@+id/pageTitle" android:text="Dashboard" android:textColor="#FFFFFF" android:textSize="23sp" android:textStyle="bold" android:paddingTop="18dp" android:paddingBottom="10dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+            <LinearLayout android:id="@+id/dashboardPage" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TextView android:text="Your AI career command center" android:textColor="#A7B0C0" android:textSize="14sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="12dp">
+                    <TextView android:id="@+id/cardJobs" android:text="JOB MATCH\n0\nLive results" android:textColor="#FFFFFF" android:textSize="16sp" android:padding="16dp" android:background="#141923" android:layout_width="0dp" android:layout_weight="1" android:layout_height="110dp"/>
+                    <Space android:layout_width="10dp" android:layout_height="1dp"/>
+                    <TextView android:id="@+id/cardApps" android:text="APPLICATIONS\n0\nTracked locally" android:textColor="#FFFFFF" android:textSize="16sp" android:padding="16dp" android:background="#141923" android:layout_width="0dp" android:layout_weight="1" android:layout_height="110dp"/>
+                </LinearLayout>
+                <Button android:id="@+id/startHunt" android:text="🚀 Start Job Hunt" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp"/>
+                <Button android:id="@+id/buildCv" android:text="✦ Build CV with AI" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/writeLetter" android:text="✉ Generate Cover Letter" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <TextView android:text="AI can tailor CVs, cover letters, interview answers and application strategy for each vacancy." android:textColor="#7F8998" android:textSize="13sp" android:paddingTop="14dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/jobsPage" android:orientation="vertical" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <EditText android:id="@+id/jobQuery" android:hint="Job title / skill / keyword" android:textColor="#FFFFFF" android:textColorHint="#778191" android:singleLine="true" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <EditText android:id="@+id/jobLocation" android:hint="Location (optional), e.g. Indonesia / Jakarta / Remote" android:textColor="#FFFFFF" android:textColorHint="#778191" android:singleLine="true" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/searchJobs" android:text="🔎 Search live jobs" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <ProgressBar android:id="@+id/jobProgress" android:visibility="gone" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                <TextView android:id="@+id/jobResults" android:text="Search live listings from public job feeds." android:textColor="#E7ECF3" android:textSize="14sp" android:lineSpacingExtra="4dp" android:paddingTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/applyPage" android:orientation="vertical" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TextView android:text="Application Center" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <TextView android:id="@+id/appResults" android:text="No applications tracked yet." android:textColor="#A7B0C0" android:textSize="14sp" android:paddingTop="10dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/aiPage" android:orientation="vertical" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TextView android:text="AI Agent" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <TextView android:id="@+id/modelLabel" android:text="OpenRouter • local key" android:textColor="#8D98A9" android:textSize="12sp" android:paddingBottom="8dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <ScrollView android:id="@+id/scroll" android:fillViewport="true" android:layout_width="match_parent" android:layout_height="260dp">
+                    <TextView android:id="@+id/chat" android:text="Welcome. Add your OpenRouter key in Settings." android:textColor="#E7ECF3" android:textSize="15sp" android:lineSpacingExtra="5dp" android:padding="14dp" android:background="#11151D" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                </ScrollView>
+                <HorizontalScrollView android:scrollbars="none" android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                        <Button android:id="@+id/quickPlan" android:text="Plan" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <Button android:id="@+id/quickJob" android:text="Job CV" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <Button android:id="@+id/quickIdeas" android:text="Ideas" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <Button android:id="@+id/quickTranslate" android:text="Translate" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
+                <EditText android:id="@+id/input" android:hint="Ask Mazkiplay Agent…" android:textColor="#FFFFFF" android:textColorHint="#727C8A" android:inputType="textCapSentences|textMultiLine" android:imeOptions="actionSend" android:minLines="2" android:maxLines="5" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <Button android:id="@+id/clear" android:text="Clear" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/send" android:text="Send" android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-        <Button android:id="@+id/settings" android:text="⚙" android:minWidth="48dp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <TextView android:id="@+id/status" android:text="● Ready" android:textColor="#62E6A5" android:textSize="12sp"
-        android:paddingTop="8dp" android:paddingBottom="6dp"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
-
-    <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none">
-        <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
-            <Button android:id="@+id/quickPlan" android:text="Plan" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-            <Button android:id="@+id/quickJob" android:text="Job CV" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-            <Button android:id="@+id/quickIdeas" android:text="Ideas" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-            <Button android:id="@+id/quickTranslate" android:text="Translate" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <ScrollView android:id="@+id/scroll" android:fillViewport="true"
-        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
-        <TextView android:id="@+id/chat" android:text="Welcome. Add your OpenRouter key in Settings, then ask me anything."
-            android:textColor="#E7ECF3" android:textSize="16sp" android:lineSpacingExtra="5dp"
-            android:padding="14dp" android:background="#141820"
-            android:layout_width="match_parent" android:layout_height="wrap_content"/>
     </ScrollView>
-
-    <EditText android:id="@+id/input" android:hint="Ask Mazkiplay Agent…"
-        android:textColor="#FFFFFF" android:textColorHint="#727C8A" android:backgroundTint="#596579"
-        android:inputType="textCapSentences|textMultiLine" android:imeOptions="actionSend"
-        android:minLines="2" android:maxLines="5" android:gravity="top|start"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
-
-    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
-        <Button android:id="@+id/clear" android:text="Clear" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-        <Space android:layout_width="8dp" android:layout_height="1dp"/>
-        <Button android:id="@+id/send" android:text="Send" android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content"/>
-    </LinearLayout>
 </LinearLayout>
