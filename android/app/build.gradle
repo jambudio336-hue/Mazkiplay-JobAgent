@@ -8,8 +8,8 @@ android {
         applicationId 'com.mazkiplay.agent'
         minSdk 26
         targetSdk 36
-        versionCode 4
-        versionName '0.3.1'
+        versionCode 5
+        versionName '0.3.2'
     }
 
     buildFeatures { buildConfig true }
@@ -19,11 +19,18 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // CI/internal distribution signing. Replace with a private release keystore
-    // before publishing to Google Play.
     signingConfigs {
         release {
-            initWith signingConfigs.debug
+            def ks = providers.gradleProperty("RELEASE_STORE_FILE").orNull
+            def kp = providers.gradleProperty("RELEASE_STORE_PASSWORD").orNull
+            def ka = providers.gradleProperty("RELEASE_KEY_ALIAS").orNull
+            def kpass = providers.gradleProperty("RELEASE_KEY_PASSWORD").orNull
+            if (ks && kp && ka && kpass) {
+                storeFile file(ks)
+                storePassword kp
+                keyAlias ka
+                keyPassword kpass
+            }
         }
     }
 
