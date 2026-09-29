@@ -3,48 +3,27 @@ plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
 android {
     namespace 'com.mazkiplay.agent'
     compileSdk 36
-
     defaultConfig {
         applicationId 'com.mazkiplay.agent'
         minSdk 26
         targetSdk 36
-        versionCode 5
-        versionName '0.3.2'
+        versionCode 6
+        versionName '0.4.0'
     }
-
     buildFeatures { buildConfig true }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
     signingConfigs {
         release {
-            def ks = providers.gradleProperty("RELEASE_STORE_FILE").orNull
-            def kp = providers.gradleProperty("RELEASE_STORE_PASSWORD").orNull
-            def ka = providers.gradleProperty("RELEASE_KEY_ALIAS").orNull
-            def kpass = providers.gradleProperty("RELEASE_KEY_PASSWORD").orNull
-            if (ks && kp && ka && kpass) {
-                // Resolve relative to the Android project root, not :app.
-                storeFile rootProject.file(ks)
-                storePassword kp
-                keyAlias ka
-                keyPassword kpass
-            }
+            def ks=providers.gradleProperty("RELEASE_STORE_FILE").orNull
+            def kp=providers.gradleProperty("RELEASE_STORE_PASSWORD").orNull
+            def ka=providers.gradleProperty("RELEASE_KEY_ALIAS").orNull
+            def kpass=providers.gradleProperty("RELEASE_KEY_PASSWORD").orNull
+            if(ks&&kp&&ka&&kpass){storeFile rootProject.file(ks);storePassword kp;keyAlias ka;keyPassword kpass}
         }
     }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
-            minifyEnabled false
-        }
-    }
+    buildTypes { release { signingConfig signingConfigs.release; minifyEnabled false } }
 }
-
 kotlin { jvmToolchain(17) }
-
 dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
