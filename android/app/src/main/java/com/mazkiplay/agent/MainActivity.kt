@@ -69,11 +69,11 @@ class MainActivity : AppCompatActivity() {
             client.newCall(req).execute().use { r ->
                 val raw = r.body?.string().orEmpty()
                 val json = runCatching { JSONObject(raw) }.getOrNull()
-                if (!r.isSuccessful) return "Gateway error: \${json?.optString("error", "HTTP \${r.code}") ?: "HTTP \${r.code}"}"
+                if (!r.isSuccessful) return "Gateway error: " + (json?.optString("error", "HTTP " + r.code) ?: "HTTP " + r.code)
                 json?.optJSONObject("message")?.optString("content", "No response.") ?: "No response."
             }
         } catch (e: Exception) {
-            "Connection error: \${e.message ?: "unknown error"}"
+            "Connection error: " + (e.message ?: "unknown error")
         }
     }
 
