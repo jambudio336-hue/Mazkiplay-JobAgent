@@ -1,39 +1,67 @@
 # Mazkiplay Agent
 
-Full-stack AI Agent Android app powered by OpenRouter.
+Mazkiplay Agent is an Android AI-agent client with an OpenRouter-backed server gateway.
 
-## Architecture
-- Android Kotlin client
-- Node.js/Express API
-- OpenRouter as the model gateway/AI brain
-- API key stays server-side in `OPENROUTER_API_KEY`
-- SQLite-ready persistence layer
+## Current release: 0.2.0
+
+### Included
+- Android Kotlin client with dark responsive chat UI
+- Configurable API endpoint from in-app settings
+- Active-session conversation history
+- Clear conversation control
+- OpenRouter model gateway
+- Server-side API-key handling
+- Input validation and message/output limits
+- Health endpoint
 - GitHub Actions release build
 
-## Environment
-Create `server/.env`:
+### Architecture
 
-```env
+Android App -> Mazkiplay API Gateway -> OpenRouter -> selected AI model
+
+The OpenRouter secret is not embedded in the APK or committed to GitHub.
+
+## Server configuration
+
+Create server/.env:
+
 PORT=8080
 OPENROUTER_API_KEY=your_key
 OPENROUTER_MODEL=openai/gpt-5.6
 CORS_ORIGIN=*
-```
+MAX_MESSAGES=40
+MAX_TOKENS=2048
+APP_URL=https://your-production-domain.example
 
-Run server:
+Run:
 
-```bash
 cd server
 npm install
 npm start
-```
 
-## Android
-Set the production API URL in `android/app/build.gradle` under `buildConfigField` or use a CI secret/configuration.
+## Android configuration
 
-## Release
-Push to GitHub. The workflow in `.github/workflows/android-release.yml` builds a release APK. For a production Play Store build, add a signing key through GitHub Actions secrets.
+The development default endpoint is http://10.0.2.2:8080 for the Android emulator.
+For a real device or production deployment, open Settings inside the app and set the deployed API URL. Use HTTPS in production.
 
-Never commit API keys or signing keys.
+## Release security
 
-Build target: Java/Kotlin JVM 17.
+Do not commit OpenRouter API keys, database credentials, JWT secrets, signing keystores, or private keys.
+The current GitHub Actions build produces an unsigned release APK. A production or Play Store release should use a permanent signing key stored in GitHub Actions secrets.
+
+## Roadmap
+
+1. Authenticated user accounts
+2. Encrypted per-user memory and database persistence
+3. Tool registry with explicit permissions
+4. Web/search and URL tools
+5. File/PDF analysis
+6. Scheduled tasks and notifications
+7. Streaming responses
+8. Usage metering, credits and subscriptions
+9. Multi-model routing through OpenRouter
+10. Signed APK/AAB release pipeline
+
+## License
+
+MIT
