@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="18dp" android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView android:text="Mazkiplay Agent 🤖" android:textSize="26sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView android:text="OpenRouter-powered personal AI agent" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingBottom="12dp" />
+    <ScrollView android:id="@+id/scroll" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <TextView android:id="@+id/chat" android:text="Ready. Tell me what you want done." android:textSize="16sp" android:padding="8dp" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    </ScrollView>
+    <EditText android:id="@+id/input" android:hint="Ask your agent..." android:minLines="2" android:gravity="top" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <Button android:id="@+id/send" android:text="Send" android:layout_width="match_parent" android:layout_height="wrap_content" />
+</LinearLayout>
