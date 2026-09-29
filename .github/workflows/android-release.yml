@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: android-release
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,6 +24,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
 
       - name: Setup Gradle 8.13
         uses: gradle/actions/setup-gradle@v4
@@ -28,7 +33,9 @@ jobs:
 
       - name: Generate temporary CI signing key
         working-directory: android
+        shell: bash
         run: |
+          set -euo pipefail
           keytool -genkeypair -v \
             -keystore ci-release.keystore \
             -storepass changeit123 \
@@ -39,50 +46,70 @@ jobs:
 
       - name: Build signed release APK
         working-directory: android
+        shell: bash
         run: |
-          gradle clean assembleRelease --no-daemon --stacktrace \
+          set -euo pipefail
+          gradle clean assembleRelease --no-daemon --stacktrace --console=plain \
             -PRELEASE_STORE_FILE=ci-release.keystore \
             -PRELEASE_STORE_PASSWORD=changeit123 \
             -PRELEASE_KEY_ALIAS=mazkiplay-ci \
             -PRELEASE_KEY_PASSWORD=changeit123
 
-      - name: Verify APK
+      - name: Verify signed APK
+        shell: bash
         run: |
-          test -s android/app/build/outputs/apk/release/app-release.apk
-          ls -lh android/app/build/outputs/apk/release/app-release.apk
+          set -euo pipefail
+          APK="android/app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          "$JAVA_HOME/bin/keytool" -printcert -jarfile "$APK" >/dev/null
+          ls -lh "$APK"
 
-      - name: Rename APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.2.apk
+      - name: Prepare release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.2.apk
+          sha256sum Mazkiplay-Agent-v0.3.2.apk | tee Mazkiplay-Agent-v0.3.2.apk.sha256
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: mazkiplay-agent-v0.3.2
-          path: Mazkiplay-Agent-v0.3.2.apk
+          path: |
+            Mazkiplay-Agent-v0.3.2.apk
+            Mazkiplay-Agent-v0.3.2.apk.sha256
           retention-days: 14
 
       - name: Publish GitHub Release
+        if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v0.3.2
           name: Mazkiplay Agent v0.3.2
           body: |
-            Mazkiplay Agent v0.3.2
+            # Mazkiplay Agent v0.3.2
 
             Android AI agent with direct OpenRouter support.
-            Full-stack repository with optional Node/Express gateway under /server.
 
-            Features:
-            - Direct OpenRouter API from Android
-            - User-provided API key stored locally on device
-            - Configurable model, token limit and system prompt
-            - Persistent conversation history
+            ## Included
+            - Direct OpenRouter chat from Android
+            - User-provided OpenRouter API key stored locally on the device
+            - Configurable model, output-token limit and system prompt
+            - Persistent local conversation history
             - Plan, Job CV, Ideas and Translate quick actions
             - Token usage display
+            - Optional Node/Express gateway under /server
 
-            The APK is signed with a temporary CI testing key for direct installation.
-            Use a private production keystore before Google Play distribution.
+            ## APK
+            Mazkiplay-Agent-v0.3.2.apk
 
-            APK: Mazkiplay-Agent-v0.3.2.apk
-          files: Mazkiplay-Agent-v0.3.2.apk
+            SHA-256 checksum is included as Mazkiplay-Agent-v0.3.2.apk.sha256.
+
+            ## Signing
+            This CI APK uses a temporary CI signing key for direct testing/install.
+            A permanent private keystore is required before Google Play distribution.
+          files: |
+            Mazkiplay-Agent-v0.3.2.apk
+            Mazkiplay-Agent-v0.3.2.apk.sha256
+          overwrite_files: true
           generate_release_notes: true
