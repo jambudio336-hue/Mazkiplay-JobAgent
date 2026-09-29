@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.startHunt).setOnClickListener{showPage("jobs")}
         findViewById<Button>(R.id.buildCv).setOnClickListener{usePrompt("Buat CV ATS profesional berdasarkan profil saya. Minta data yang masih kurang lalu susun CV satu halaman: ")}
         findViewById<Button>(R.id.writeLetter).setOnClickListener{usePrompt("Buat surat lamaran kerja profesional dan personal untuk lowongan berikut. Sertakan subjek email dan versi singkat: ")}
-        findViewById<Button>(R.id.searchJobs).setOnClickListener{searchJobs()}
+        findViewById<Button>(R.id.searchJobs).setOnClickListener{searchJobs()}\n        findViewById<Button>(R.id.generateApplication).setOnClickListener{usePrompt("Buat application pack untuk lowongan ini: CV ringkas ATS + cover letter + email subject + email body. Jangan mengarang pengalaman saya: ") }\n        findViewById<Button>(R.id.sendApplication).setOnClickListener{prepareEmailSend()}
         findViewById<Button>(R.id.clear).setOnClickListener{clearConversation()}
         findViewById<Button>(R.id.quickPlan).setOnClickListener{usePrompt("Buat rencana langkah demi langkah untuk tujuan berikut: ")}
         findViewById<Button>(R.id.quickJob).setOnClickListener{usePrompt("Bantu saya membuat CV dan strategi melamar pekerjaan untuk posisi berikut: ")}
