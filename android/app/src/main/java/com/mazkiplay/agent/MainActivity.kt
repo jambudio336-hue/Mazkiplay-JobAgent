@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         val url = EditText(this).apply {
             hint = "https://your-agent-api.example"
             setText(prefs.getString("api_url", BuildConfig.API_BASE_URL))
-            singleLine = true
+            isSingleLine = true
         }
         box.addView(TextView(this).apply { text = "Backend API URL"; setPadding(0, 0, 0, 8) })
         box.addView(url)
