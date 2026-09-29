@@ -1,1 +1,48 @@
-# Mazkiplay Agent\n\nMazkiplay Agent is a lightweight Android AI-agent client powered directly by OpenRouter, with an optional Node/Express gateway for server-side deployments.\n\n## Current release: 0.3.2\n\n### Android client\n- Kotlin Android application\n- Dark, responsive chat UI\n- Direct OpenRouter Chat Completions integration\n- User enters their own OpenRouter API key in Settings\n- API key is kept in local app storage and is never committed to this repository\n- Configurable OpenRouter model, max output tokens and system prompt\n- Persistent local conversation history\n- Quick actions: Plan, Job CV, Ideas and Translate\n- Token usage status\n- Clear conversation control\n\n### Optional backend\nThe server/ directory contains an Express gateway for deployments where the OpenRouter secret should remain server-side.\n\nArchitecture:\n\n    Direct mode: Android App -> OpenRouter\n    Gateway mode: Android/App -> Node/Express Gateway -> OpenRouter\n\nThe current Android release uses direct mode. The server is optional and is not required for the APK to chat with OpenRouter.\n\n## Android build\n\nRequirements: JDK 17, Android SDK compileSdk 36, Gradle 8.13.\n\nBuild locally:\n\n    cd android\n    gradle clean assembleRelease\n\nFor a signed CI build, the GitHub Actions workflow creates an ephemeral signing keystore during the job. The keystore is not stored in the repository.\n\n## OpenRouter configuration\n\nOpen the app Settings and enter the OpenRouter API key, model ID, maximum output tokens and system prompt. No OpenRouter secret is hard-coded into the source code or APK.\n\n## Server configuration\n\nCreate server/.env with PORT, OPENROUTER_API_KEY, OPENROUTER_MODEL, CORS_ORIGIN, MAX_MESSAGES, MAX_TOKENS and APP_URL. Then run npm install and npm start from server/.\n\n## Release security\n\nDo not commit API keys, database credentials, JWT secrets, signing keystores or private keys. The CI APK is signed with an ephemeral testing key. Before Google Play publishing, configure a permanent private Android signing key through protected GitHub Actions secrets and produce a production AAB/APK.\n\n## Roadmap\n\n1. Encrypted local secret storage\n2. Authenticated user accounts\n3. Encrypted per-user memory and database persistence\n4. Explicit-permission tool registry\n5. Web/search and URL tools\n6. File/PDF analysis\n7. Scheduled tasks and notifications\n8. Streaming responses\n9. Usage metering, credits and subscriptions\n10. Multi-model routing through OpenRouter\n\n## License\n\nMIT\n
+# Mazkiplay Agent
+
+Premium Android AI job-hunting workspace powered by OpenRouter.
+
+## Release 0.4.0
+
+### Dashboard
+- Premium dark command-center UI
+- Live date/time/year and online status
+- Dashboard metrics and quick career actions
+- Dedicated Job Hunting, Application Center and AI Agent pages
+
+### Job Hunting
+- Live public job-feed search
+- Keyword and location filters
+- Remote/on-site listing metadata where supplied by the source
+- Application URL shown for each listing
+- AI-assisted CV, ATS optimization, cover letters and application strategy
+
+### Application Center
+- Generate an application pack with AI
+- Review before sending
+- Opens the device email client for final user-controlled sending
+
+The app deliberately does not silently submit applications or impersonate the user. Automated submission to a specific job platform requires that platform's supported API/authentication and explicit user authorization.
+
+### AI
+- Direct OpenRouter Chat Completions
+- User-provided API key stored locally
+- Configurable model, token limit and system prompt
+- Persistent local conversation history
+- Plan, Job CV, Ideas and Translate shortcuts
+
+## Live / real-time behavior
+
+The clock updates every second from the device clock. Job listings are fetched over HTTPS when the user searches. Real-time data depends on the upstream public feed and network connection; no app can guarantee connectivity when the device is offline.
+
+## Security
+
+No OpenRouter secret is hard-coded in the repository. The current local key storage should be upgraded to Android Keystore-backed encrypted storage before production distribution. The CI release key is temporary testing signing; use a permanent private signing key for Google Play.
+
+## Build
+
+Requirements: JDK 17, Android SDK compileSdk 36, Gradle 8.13.
+
+## License
+
+MIT
