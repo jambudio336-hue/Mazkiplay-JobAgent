@@ -1,14 +1,42 @@
 plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
 
-android { namespace 'com.mazkiplay.agent'; compileSdk 36
-    defaultConfig { applicationId 'com.mazkiplay.agent'; minSdk 26; targetSdk 36; versionCode 3; versionName '0.3.0' }
+android {
+    namespace 'com.mazkiplay.agent'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.mazkiplay.agent'
+        minSdk 26
+        targetSdk 36
+        versionCode 4
+        versionName '0.3.1'
+    }
+
     buildFeatures { buildConfig true }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    // CI/internal distribution signing. Replace with a private release keystore
+    // before publishing to Google Play.
+    signingConfigs {
+        release {
+            initWith signingConfigs.debug
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+    }
 }
+
 kotlin { jvmToolchain(17) }
+
 dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
