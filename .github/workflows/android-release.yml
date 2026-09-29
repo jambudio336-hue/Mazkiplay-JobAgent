@@ -12,49 +12,57 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v5
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Gradle
+      - name: Setup Gradle 8.13
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.13'
 
       - name: Build release APK
         working-directory: android
-        run: gradle assembleRelease --no-daemon
+        run: gradle clean assembleRelease --no-daemon --stacktrace
+
+      - name: Verify APK
+        run: |
+          test -f android/app/build/outputs/apk/release/app-release.apk
+          ls -lh android/app/build/outputs/apk/release/app-release.apk
 
       - name: Rename APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.0.apk
+        run: cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.1.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mazkiplay-agent-v0.3.0
-          path: Mazkiplay-Agent-v0.3.0.apk
+          name: mazkiplay-agent-v0.3.1
+          path: Mazkiplay-Agent-v0.3.1.apk
+          retention-days: 14
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.3.0
-          name: Mazkiplay Agent v0.3.0
+          tag_name: v0.3.1
+          name: Mazkiplay Agent v0.3.1
           body: |
-            Mazkiplay Agent v0.3.0
+            Mazkiplay Agent v0.3.1
 
-            Android AI agent with direct OpenRouter support.
-
-            Features:
-            - Local OpenRouter API key configuration
-            - Configurable model and max output tokens
-            - Persistent local conversation history
+            Full-stack repository:
+            - Android client with direct OpenRouter access
+            - Node/Express backend under /server for hosted deployments
+            - OpenRouter API key can remain local to the Android client
+            - Persistent chat history and configurable model/system prompt
             - Quick actions: Plan, Job CV, Ideas, Translate
-            - Token usage display
-            - No backend required for the Android chat path
 
-            APK: Mazkiplay-Agent-v0.3.0.apk
-          files: Mazkiplay-Agent-v0.3.0.apk
+            This APK is CI-signed for direct installation/testing.
+            Use a private production keystore before Google Play distribution.
+
+            APK: Mazkiplay-Agent-v0.3.1.apk
+          files: Mazkiplay-Agent-v0.3.1.apk
           generate_release_notes: true
