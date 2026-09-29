@@ -68,26 +68,26 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.2.apk
-          sha256sum Mazkiplay-Agent-v0.3.2.apk | tee Mazkiplay-Agent-v0.3.2.apk.sha256
+          cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.4.0.apk
+          sha256sum Mazkiplay-Agent-v0.4.0.apk | tee Mazkiplay-Agent-v0.4.0.apk.sha256
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mazkiplay-agent-v0.3.2
+          name: mazkiplay-agent-v0.4.0
           path: |
-            Mazkiplay-Agent-v0.3.2.apk
-            Mazkiplay-Agent-v0.3.2.apk.sha256
+            Mazkiplay-Agent-v0.4.0.apk
+            Mazkiplay-Agent-v0.4.0.apk.sha256
           retention-days: 14
 
       - name: Publish GitHub Release
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.3.2
-          name: Mazkiplay Agent v0.3.2
+          tag_name: v0.4.0
+          name: Mazkiplay Agent v0.4.0
           body: |
-            # Mazkiplay Agent v0.3.2
+            # Mazkiplay Agent v0.4.0
 
             Android AI agent with direct OpenRouter support.
 
@@ -101,15 +101,15 @@ jobs:
             - Optional Node/Express gateway under /server
 
             ## APK
-            Mazkiplay-Agent-v0.3.2.apk
+            Mazkiplay-Agent-v0.4.0.apk
 
-            SHA-256 checksum is included as Mazkiplay-Agent-v0.3.2.apk.sha256.
+            SHA-256 checksum is included as Mazkiplay-Agent-v0.4.0.apk.sha256.
 
             ## Signing
             This CI APK uses a temporary CI signing key for direct testing/install.
             A permanent private keystore is required before Google Play distribution.
           files: |
-            Mazkiplay-Agent-v0.3.2.apk
-            Mazkiplay-Agent-v0.3.2.apk.sha256
+            Mazkiplay-Agent-v0.4.0.apk
+            Mazkiplay-Agent-v0.4.0.apk.sha256
           overwrite_files: true
           generate_release_notes: true
