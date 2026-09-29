@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2 - 2026-09-30
+- Fixed CI release signing by generating a temporary keystore inside GitHub Actions.
+- Release build now passes explicit signing properties to Gradle.
+- Release artifact is versioned as `Mazkiplay-Agent-v0.3.2.apk`.
+
+
 ## 0.3.1 - 2026-09-30
 - Fixed CI release signing so the workflow produces an installable `app-release.apk`.
 - Added APK existence verification before publishing the GitHub Release.
