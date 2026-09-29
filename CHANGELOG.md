@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 - 2026-09-30
+- Fixed CI release signing so the workflow produces an installable `app-release.apk`.
+- Added APK existence verification before publishing the GitHub Release.
+- Added release artifact retention for 14 days.
+- Documented the Android client + Node/Express backend full-stack layout.
+- Marked the CI APK as internal/testing signed; a private production keystore is required for Google Play distribution.
+
 ## 0.3.0 - 2026-09-30
 - Direct OpenRouter integration from the Android app.
 - API key is entered by the user and stored locally on the device.
