@@ -35,3 +35,5 @@ Set the production API URL in `android/app/build.gradle` under `buildConfigField
 Push to GitHub. The workflow in `.github/workflows/android-release.yml` builds a release APK. For a production Play Store build, add a signing key through GitHub Actions secrets.
 
 Never commit API keys or signing keys.
+
+Build target: Java/Kotlin JVM 17.
