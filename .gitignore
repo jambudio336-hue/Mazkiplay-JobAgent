@@ -1,0 +1,7 @@
+server/node_modules/
+server/.env
+android/.gradle/
+android/build/
+android/app/build/
+*.jks
+*.keystore
