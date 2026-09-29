@@ -26,7 +26,8 @@ android {
             def ka = providers.gradleProperty("RELEASE_KEY_ALIAS").orNull
             def kpass = providers.gradleProperty("RELEASE_KEY_PASSWORD").orNull
             if (ks && kp && ka && kpass) {
-                storeFile file(ks)
+                // Resolve relative to the Android project root, not :app.
+                storeFile rootProject.file(ks)
                 storePassword kp
                 keyAlias ka
                 keyPassword kpass
