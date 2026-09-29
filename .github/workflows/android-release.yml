@@ -26,43 +26,63 @@ jobs:
         with:
           gradle-version: '8.13'
 
-      - name: Build release APK
+      - name: Generate temporary CI signing key
         working-directory: android
-        run: gradle clean assembleRelease --no-daemon --stacktrace
+        run: |
+          keytool -genkeypair -v \
+            -keystore ci-release.keystore \
+            -storepass changeit123 \
+            -alias mazkiplay-ci \
+            -keypass changeit123 \
+            -keyalg RSA -keysize 2048 -validity 3650 \
+            -dname "CN=Mazkiplay Agent, OU=CI, O=Mazkiplay, L=NA, ST=NA, C=ID"
+
+      - name: Build signed release APK
+        working-directory: android
+        run: |
+          gradle clean assembleRelease --no-daemon --stacktrace \
+            -PRELEASE_STORE_FILE=ci-release.keystore \
+            -PRELEASE_STORE_PASSWORD=changeit123 \
+            -PRELEASE_KEY_ALIAS=mazkiplay-ci \
+            -PRELEASE_KEY_PASSWORD=changeit123
 
       - name: Verify APK
         run: |
-          test -f android/app/build/outputs/apk/release/app-release.apk
+          test -s android/app/build/outputs/apk/release/app-release.apk
           ls -lh android/app/build/outputs/apk/release/app-release.apk
 
       - name: Rename APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.1.apk
+        run: cp android/app/build/outputs/apk/release/app-release.apk Mazkiplay-Agent-v0.3.2.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mazkiplay-agent-v0.3.1
-          path: Mazkiplay-Agent-v0.3.1.apk
+          name: mazkiplay-agent-v0.3.2
+          path: Mazkiplay-Agent-v0.3.2.apk
           retention-days: 14
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.3.1
-          name: Mazkiplay Agent v0.3.1
+          tag_name: v0.3.2
+          name: Mazkiplay Agent v0.3.2
           body: |
-            Mazkiplay Agent v0.3.1
+            Mazkiplay Agent v0.3.2
 
-            Full-stack repository:
-            - Android client with direct OpenRouter access
-            - Node/Express backend under /server for hosted deployments
-            - OpenRouter API key can remain local to the Android client
-            - Persistent chat history and configurable model/system prompt
-            - Quick actions: Plan, Job CV, Ideas, Translate
+            Android AI agent with direct OpenRouter support.
+            Full-stack repository with optional Node/Express gateway under /server.
 
-            This APK is CI-signed for direct installation/testing.
+            Features:
+            - Direct OpenRouter API from Android
+            - User-provided API key stored locally on device
+            - Configurable model, token limit and system prompt
+            - Persistent conversation history
+            - Plan, Job CV, Ideas and Translate quick actions
+            - Token usage display
+
+            The APK is signed with a temporary CI testing key for direct installation.
             Use a private production keystore before Google Play distribution.
 
-            APK: Mazkiplay-Agent-v0.3.1.apk
-          files: Mazkiplay-Agent-v0.3.1.apk
+            APK: Mazkiplay-Agent-v0.3.2.apk
+          files: Mazkiplay-Agent-v0.3.2.apk
           generate_release_notes: true
