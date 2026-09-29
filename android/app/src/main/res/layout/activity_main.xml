@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="18dp" android:layout_width="match_parent" android:layout_height="match_parent">
-    <TextView android:text="Mazkiplay Agent 🤖" android:textSize="26sp" android:textStyle="bold" android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:text="OpenRouter-powered personal AI agent" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingBottom="12dp" />
-    <ScrollView android:id="@+id/scroll" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
-        <TextView android:id="@+id/chat" android:text="Ready. Tell me what you want done." android:textSize="16sp" android:padding="8dp" android:layout_width="match_parent" android:layout_height="wrap_content" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="18dp" android:background="#0B0D10"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content">
+            <TextView android:text="Mazkiplay Agent" android:textColor="#FFFFFF" android:textSize="25sp" android:textStyle="bold"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <TextView android:text="Your AI. Your tools. Your control." android:textColor="#9AA4B2" android:textSize="13sp"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <Button android:id="@+id/settings" android:text="⚙" android:minWidth="48dp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <TextView android:id="@+id/status" android:text="● Ready" android:textColor="#62E6A5" android:textSize="12sp"
+        android:paddingTop="10dp" android:paddingBottom="10dp"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <ScrollView android:id="@+id/scroll" android:fillViewport="true"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <TextView android:id="@+id/chat" android:text="Ready. Tell me what you want done."
+            android:textColor="#E7ECF3" android:textSize="16sp" android:lineSpacingExtra="5dp"
+            android:padding="14dp" android:background="#141820"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
     </ScrollView>
-    <EditText android:id="@+id/input" android:hint="Ask your agent..." android:minLines="2" android:gravity="top" android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <Button android:id="@+id/send" android:text="Send" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <EditText android:id="@+id/input" android:hint="Ask Mazkiplay Agent…"
+        android:textColor="#FFFFFF" android:textColorHint="#727C8A" android:backgroundTint="#596579"
+        android:inputType="textCapSentences|textMultiLine" android:imeOptions="actionSend"
+        android:minLines="2" android:maxLines="5" android:gravity="top|start"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:id="@+id/clear" android:text="Clear" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
+        <Space android:layout_width="10dp" android:layout_height="1dp"/>
+        <Button android:id="@+id/send" android:text="Send" android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content"/>
+    </LinearLayout>
 </LinearLayout>
