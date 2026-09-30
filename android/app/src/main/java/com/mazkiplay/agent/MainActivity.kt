@@ -58,7 +58,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.startHunt).setOnClickListener{showPage("jobs")}
         findViewById<Button>(R.id.buildCv).setOnClickListener{usePrompt("Buat CV ATS profesional berdasarkan profil saya. Minta data yang masih kurang lalu susun CV satu halaman: ")}
         findViewById<Button>(R.id.writeLetter).setOnClickListener{usePrompt("Buat surat lamaran kerja profesional dan personal untuk lowongan berikut. Sertakan subjek email dan versi singkat: ")}
-        findViewById<Button>(R.id.searchJobs).setOnClickListener{searchJobs()}\n        findViewById<Button>(R.id.generateApplication).setOnClickListener{usePrompt("Buat application pack untuk lowongan ini: CV ringkas ATS + cover letter + email subject + email body. Jangan mengarang pengalaman saya: ") }\n        findViewById<Button>(R.id.sendApplication).setOnClickListener{prepareEmailSend()}
+        findViewById<Button>(R.id.searchJobs).setOnClickListener { searchJobs() }
+        findViewById<Button>(R.id.generateApplication).setOnClickListener {
+            usePrompt("Buat application pack untuk lowongan ini: CV ringkas ATS + cover letter + email subject + email body. Jangan mengarang pengalaman saya: ")
+        }
+        findViewById<Button>(R.id.sendApplication).setOnClickListener { prepareEmailSend() }
         findViewById<Button>(R.id.clear).setOnClickListener{clearConversation()}
         findViewById<Button>(R.id.quickPlan).setOnClickListener{usePrompt("Buat rencana langkah demi langkah untuk tujuan berikut: ")}
         findViewById<Button>(R.id.quickJob).setOnClickListener{usePrompt("Bantu saya membuat CV dan strategi melamar pekerjaan untuk posisi berikut: ")}
@@ -160,6 +164,29 @@ class MainActivity : AppCompatActivity() {
         runCatching{val a=JSONArray(s);for(i in 0 until a.length())history.put(a.getJSONObject(i));chat.text="";for(i in 0 until history.length()){val m=history.getJSONObject(i);append(if(m.optString("role")=="user")"You" else "Mazkiplay Agent",m.optString("content"))}}
     }
     private fun updateModelLabel(){modelLabel.text="OpenRouter • "+prefs.getString("model",defaultModel).orEmpty().ifBlank{defaultModel}+" • local key"}
+
+    private fun prepareEmailSend(){
+        val draft = chat.text.toString().trim()
+        if(draft.isBlank()){
+            Toast.makeText(this,"Generate cover letter/application di AI Agent dulu.",Toast.LENGTH_LONG).show()
+            showPage("ai")
+            return
+        }
+        AlertDialog.Builder(this)
+            .setTitle("Review sebelum kirim")
+            .setMessage("Mazkiplay akan membuka aplikasi email dengan draft AI. Lu tetap memeriksa penerima, isi, CV/lampiran, lalu menekan Send sendiri.")
+            .setNegativeButton("Cancel",null)
+            .setPositiveButton("Open Email"){_,_->
+                val intent=Intent(Intent.ACTION_SENDTO).apply{
+                    data=Uri.parse("mailto:")
+                    putExtra(Intent.EXTRA_SUBJECT,"Lamaran kerja — Mazkiplay Agent")
+                    putExtra(Intent.EXTRA_TEXT,draft)
+                }
+                runCatching{startActivity(intent)}.onFailure{
+                    Toast.makeText(this,"Tidak ada aplikasi email yang tersedia.",Toast.LENGTH_LONG).show()
+                }
+            }.show()
+    }
 
     private fun showSettings(){
         val box=LinearLayout(this).apply{orientation=LinearLayout.VERTICAL;setPadding(32,8,32,0)}
