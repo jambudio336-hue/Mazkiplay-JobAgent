@@ -1,6 +1,6 @@
 package com.mazkiplay.agent
 
-import android.content.Context
+import android.content.Context\nimport android.content.Intent\nimport android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
@@ -134,23 +134,72 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun callOpenRouter(key:String):Pair<String,String?>=try{
-        val model=prefs.getString("model",defaultModel).orEmpty().ifBlank{defaultModel}
-        val maxTokens=prefs.getString("max_tokens","2048")?.toIntOrNull()?.coerceIn(256,8192)?:2048
-        val system=prefs.getString("system_prompt","You are Mazkiplay Agent, an AI job-hunting and productivity agent. Help users discover jobs, tailor CVs, write cover letters and prepare applications. Never claim an application was sent unless the device actually completed an external action.").orEmpty()
-        val messages=JSONArray().put(JSONObject().put("role","system").put("content",system))
-        for(i in maxOf(0,history.length()-40) until history.length())messages.put(history.getJSONObject(i))
-        val body=JSONObject().put("model",model).put("messages",messages).put("temperature",0.2).put("max_tokens",maxTokens).toString().toRequestBody("application/json".toMediaType())
-        val req=Request.Builder().url(openRouterUrl).addHeader("Authorization","Bearer "+key).addHeader("Content-Type","application/json").addHeader("HTTP-Referer","https://mazkiplay.ai").addHeader("X-Title","Mazkiplay Agent").post(body).build()
-        client.newCall(req).execute().use{r->
-            val raw=r.body?.string().orEmpty();val json=runCatching{JSONObject(raw)}.getOrNull()
-            if(!r.isSuccessful)return ("OpenRouter error: "+(json?.optJSONObject("error")?.optString("message","HTTP "+r.code)?:"HTTP "+r.code)) to null
-            val content=json?.optJSONArray("choices")?.optJSONObject(0)?.optJSONObject("message")?.optString("content","").orEmpty()
-            if(content.isBlank())return "No response returned by the model." to null
-            val u=json?.optJSONObject("usage")
-            content to u?.let{"Tokens: "+it.optInt("prompt_tokens")+" in / "+it.optInt("completion_tokens")+" out"}
+    private fun callOpenRouter(key: String): Pair<String, String?> {
+        return try {
+            val model = prefs.getString("model", defaultModel).orEmpty().ifBlank { defaultModel }
+            val maxTokens = prefs.getString("max_tokens", "2048")?.toIntOrNull()?.coerceIn(256, 8192) ?: 2048
+            val system = prefs.getString(
+                "system_prompt",
+                "You are Mazkiplay Agent, an AI job-hunting and productivity agent. Help users discover jobs, tailor CVs, write cover letters and prepare applications. Never claim an application was sent unless the device actually completed an external action."
+            ).orEmpty()
+
+            val messages = JSONArray()
+                .put(JSONObject().put("role", "system").put("content", system))
+            val startIndex = maxOf(0, history.length() - 40)
+            for (i in startIndex until history.length()) {
+                messages.put(history.getJSONObject(i))
+            }
+
+            val requestJson = JSONObject()
+                .put("model", model)
+                .put("messages", messages)
+                .put("temperature", 0.2)
+                .put("max_tokens", maxTokens)
+
+            val body = requestJson.toString()
+                .toRequestBody("application/json".toMediaType())
+
+            val request = Request.Builder()
+                .url(openRouterUrl)
+                .addHeader("Authorization", "Bearer " + key)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("HTTP-Referer", "https://mazkiplay.ai")
+                .addHeader("X-Title", "Mazkiplay Agent")
+                .post(body)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                val raw = response.body?.string().orEmpty()
+                val json = runCatching { JSONObject(raw) }.getOrNull()
+
+                if (!response.isSuccessful) {
+                    val errorMessage = json?.optJSONObject("error")
+                        ?.optString("message", "HTTP " + response.code)
+                        ?: "HTTP " + response.code
+                    "OpenRouter error: " + errorMessage to null
+                } else {
+                    val content = json?.optJSONArray("choices")
+                        ?.optJSONObject(0)
+                        ?.optJSONObject("message")
+                        ?.optString("content", "")
+                        .orEmpty()
+
+                    if (content.isBlank()) {
+                        "No response returned by the model." to null
+                    } else {
+                        val usage = json?.optJSONObject("usage")
+                        val tokenInfo = usage?.let {
+                            "Tokens: " + it.optInt("prompt_tokens") + " in / " +
+                                it.optInt("completion_tokens") + " out"
+                        }
+                        content to tokenInfo
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            "Connection error: " + (e.message ?: "unknown error") to null
         }
-    }catch(e:Exception){"Connection error: "+(e.message?:"unknown error") to null}
+    }
 
     private fun append(who:String,text:String){
         if(chat.text.isNotEmpty())chat.append("\n\n");chat.append(who+"\n"+text)
